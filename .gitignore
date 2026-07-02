@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pt
+
+
+# Virtual Environment
+venv/
+.venv/
+
+# YOLO Training Outputs
+runs/
+models/
+
+# Dataset
+datasets/
+
+# Videos
+video_data/
+
+# Outputs
+outputs/
+
+# Environment Files
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+CricketVision AI.pdf
