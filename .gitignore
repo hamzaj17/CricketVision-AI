@@ -3,7 +3,9 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.pt
+
+yolo26n.pt
+yolov8n.pt
 
 
 # Virtual Environment
@@ -12,7 +14,7 @@ venv/
 
 # YOLO Training Outputs
 runs/
-models/
+
 
 # Dataset
 datasets/
