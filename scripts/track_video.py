@@ -4,12 +4,13 @@ import os
 import time
 
 MODEL_PATH = "models/cricketvision_v1.pt"
+INPUT_FOLDER = "video_data/inputs"
+OUTPUT_FOLDER = "video_data/outputs/tracking"
 
-INPUT_FOLDER = "videos/input"
+TRACKER = "bytetrack.yaml"
 
-OUTPUT_FOLDER = "videos/output"
+CONFIDENCE = 0.30
 
-CONFIDENCE = 0.35
 
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
@@ -17,20 +18,20 @@ model = YOLO(MODEL_PATH)
 
 video_files = [
     f for f in os.listdir(INPUT_FOLDER)
-    if f.endswith((".mp4", ".avi", ".mov", ".mkv"))
+    if f.lower().endswith((".mp4", ".avi", ".mov", ".mkv"))
 ]
 
 print("=" * 60)
 print("CricketVision AI - Object Tracking")
 print("=" * 60)
 
-for video_name in video_files:
+for video in video_files:
 
-    input_path = os.path.join(INPUT_FOLDER, video_name)
+    input_path = os.path.join(INPUT_FOLDER, video)
 
     output_path = os.path.join(
         OUTPUT_FOLDER,
-        "tracked_" + video_name
+        f"tracked_{video}"
     )
 
     cap = cv2.VideoCapture(input_path)
@@ -39,7 +40,7 @@ for video_name in video_files:
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    out = cv2.VideoWriter(
+    writer = cv2.VideoWriter(
         output_path,
         cv2.VideoWriter_fourcc(*"mp4v"),
         fps,
@@ -50,39 +51,39 @@ for video_name in video_files:
 
     start = time.time()
 
+    print(f"\nProcessing: {video}")
+
     while True:
 
-        success, frame = cap.read()
+        ret, frame = cap.read()
 
-        if not success:
+        if not ret:
             break
 
         results = model.track(
             frame,
             persist=True,
-            tracker="bytetrack.yaml",
+            tracker=TRACKER,
             conf=CONFIDENCE,
             verbose=False
         )
 
-        annotated_frame = results[0].plot()
+        annotated = results[0].plot()
 
-        out.write(annotated_frame)
+        writer.write(annotated)
 
         frame_count += 1
 
-        if frame_count % 100 == 0:
-            print(f"{video_name} : {frame_count} frames")
+        if frame_count % 50 == 0:
+            print(f"Frames Processed : {frame_count}")
 
     cap.release()
-    out.release()
+    writer.release()
 
     elapsed = time.time() - start
 
-    print(f"\nFinished : {video_name}")
+    print(f"Finished : {video}")
     print(f"Frames   : {frame_count}")
-    print(f"Time     : {elapsed:.2f} sec\n")
+    print(f"Time     : {elapsed:.2f} sec")
 
-print("=" * 60)
-print("Tracking Completed!")
-print("=" * 60)
+print("\nTracking Completed Successfully!")
