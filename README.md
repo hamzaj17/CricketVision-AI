@@ -22,20 +22,6 @@ The project was developed to explore real-time sports computer vision and serves
 
 ---
 
-# 🖼️ Sample Results
-
-*(Add screenshots or GIFs here)*
-
-Example:
-
-```
-assets/demo.gif
-assets/result1.png
-assets/result2.png
-```
-
----
-
 # 🛠️ Tech Stack
 
 | Category | Technology |
@@ -249,11 +235,6 @@ These limitations can be addressed with a larger and more diverse training datas
 # 👨‍💻 Author
 
 **Hamza Bin Javed**
-
-Bachelor of Artificial Intelligence
-
-GitHub:
-https://github.com/hamzaj17
 
 ---
 
