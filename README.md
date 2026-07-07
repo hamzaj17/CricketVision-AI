@@ -1,14 +1,22 @@
 # 🏏 CricketVision AI
 
-An AI-powered cricket analytics system built using **YOLOv8** that detects and tracks cricket objects including **players, bats, balls, and stumps** from images and videos.
+CricketVision AI is a computer vision project built using **YOLOv8** for detecting key cricket objects—including **players, bats, balls, and stumps**—from cricket broadcast images and videos.
 
-The project was developed to explore real-time sports computer vision and serves as a foundation for advanced cricket analytics such as player tracking, ball trajectory estimation, and automated match analysis.
+The project includes a complete end-to-end pipeline for **frame extraction, dataset creation, manual annotation, dataset preparation, model training, and inference**. It serves as a foundation for future cricket analytics such as object tracking, ball trajectory estimation, player movement analysis, and automated match insights.
 
 ---
 
-# 📌 Features
+# 🎥 Demo
 
-- 🎯 Real-time object detection
+### Object Detection on Unseen Cricket Footage
+
+![Demo](assets/demo.gif)
+
+---
+
+# ✨ Features
+
+- 🎯 Custom YOLOv8 object detector
 - 🏏 Detects:
   - Ball
   - Bat
@@ -16,9 +24,11 @@ The project was developed to explore real-time sports computer vision and serves
   - Stumps
 - 📹 Video inference
 - 🖼️ Image inference
-- 📊 Custom trained YOLOv8 model
-- ⚡ GPU accelerated inference (CUDA supported)
-- 📈 Dataset preparation and training pipeline
+- 📊 Complete model training pipeline
+- 🛠️ Custom dataset preparation scripts
+- ⚡ GPU accelerated training and inference
+- 📦 Automated dataset splitting
+- 📝 Custom annotation tool for label correction
 
 ---
 
@@ -26,39 +36,36 @@ The project was developed to explore real-time sports computer vision and serves
 
 | Category | Technology |
 |----------|------------|
-| Language | Python |
+| Programming Language | Python |
 | Deep Learning | PyTorch |
 | Object Detection | YOLOv8 (Ultralytics) |
-| Image Processing | OpenCV |
+| Computer Vision | OpenCV |
 | Visualization | Matplotlib |
-| Dataset Annotation | Roboflow |
-| Dataset Management | Custom Python Scripts |
+| Dataset Annotation | Roboflow + Custom Annotation Tool |
+| Dataset Preparation | Custom Python Scripts |
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 CricketVision_AI
 │
-├── datasets/
-│   ├── cricket_dataset_final/
-│   └── ...
+├── assets/
+│   ├── demo.gif
+│   └── confusion_matrix.png
 │
 ├── models/
-│   ├── cricketvision_final.pt
-│   └── cricketvision_v1.pt
-│
+│   └── cricketvision_final.pt
+│   
 ├── scripts/
-│   ├── train_final.py
-│   ├── test_video.py
-│   ├── track_video.py
-│   ├── predict.py
 │   ├── extract_frames.py
-│   └── split_dataset.py
-│
-├── test_videos/
-├── video_data/
+│   ├── annotation_tool.py
+│   ├── split_dataset.py
+│   ├── train_final.py
+│   ├── predict.py
+│   ├── test_video.py
+│   └── track_video.py
 │
 ├── requirements.txt
 ├── README.md
@@ -69,16 +76,28 @@ CricketVision_AI
 
 # 📊 Dataset
 
-The dataset consists of manually annotated cricket images collected from multiple broadcast videos.
+One of the primary goals of this project was to build a **custom cricket object detection dataset** rather than relying entirely on existing public datasets.
+
+### Dataset Creation Process
+
+1. Cricket broadcast videos were collected.
+2. Frames were extracted using custom Python scripts.
+3. An initial subset of images was manually annotated in Roboflow.
+4. A preliminary YOLOv8 model was trained on this subset.
+5. The trained model was then used to generate initial predictions on the remaining images.
+6. A custom annotation tool was developed to manually review, correct, and improve these predictions.
+7. All corrected annotations were merged into a final dataset and randomly split into training, validation, and testing sets.
+
+This semi-automated workflow significantly reduced annotation time while maintaining annotation quality.
 
 ### Classes
 
-- Ball
-- Bat
-- Player
-- Stumps
+- 🏏 Ball
+- 🏏 Bat
+- 🧍 Player
+- 🎯 Stumps
 
-### Dataset Statistics
+### Final Dataset Statistics
 
 | Split | Images |
 |--------|---------|
@@ -87,7 +106,7 @@ The dataset consists of manually annotated cricket images collected from multipl
 | Test | 63 |
 | **Total** | **623** |
 
-Annotations were created using **Roboflow** and additional custom annotation tools.
+All annotations were manually verified before training the final model.
 
 ---
 
@@ -96,7 +115,7 @@ Annotations were created using **Roboflow** and additional custom annotation too
 Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/CricketVision_AI.git
+git clone https://github.com/hamzaj17/CricketVision_AI.git
 ```
 
 Move into the project
@@ -111,7 +130,7 @@ Create a virtual environment
 python -m venv venv
 ```
 
-Activate it
+Activate the environment
 
 ### Windows
 
@@ -119,13 +138,13 @@ Activate it
 venv\Scripts\activate
 ```
 
-### Linux / Mac
+### Linux / macOS
 
 ```bash
 source venv/bin/activate
 ```
 
-Install dependencies
+Install the required packages
 
 ```bash
 pip install -r requirements.txt
@@ -135,25 +154,25 @@ pip install -r requirements.txt
 
 # 🧠 Training
 
-Train the final model
+Train the final YOLOv8 model
 
 ```bash
 python scripts/train_final.py
 ```
 
-The trained weights will be saved inside
+The trained model will be saved inside
 
-```
-runs/detect/
+```text
+runs/detect/CricketVision_Final/
 ```
 
 ---
 
-# 🎥 Test on a Video
+# 🎥 Video Inference
 
-Place your video inside
+Place the test video inside
 
-```
+```text
 test_videos/
 ```
 
@@ -163,15 +182,13 @@ Run
 python scripts/test_video.py
 ```
 
-Output videos will be saved automatically inside
-
-```
-runs/detect/
-```
+The output video will be saved automatically.
 
 ---
 
-# 📷 Test on Images
+# 🖼️ Image Inference
+
+Run
 
 ```bash
 python scripts/predict.py
@@ -179,56 +196,60 @@ python scripts/predict.py
 
 ---
 
-# 📈 Current Performance
+# 📈 Results
 
-Validation Results
+The final detector was trained on **623 manually verified cricket images**.
+
+### Overall Validation Performance
 
 | Metric | Score |
 |---------|--------|
-| Precision | 84.1% |
-| Recall | 77.7% |
+| Precision | **84.1%** |
+| Recall | **77.7%** |
 | mAP@50 | **82.1%** |
 | mAP@50-95 | **49.9%** |
 
 ### Per-Class Performance
 
-| Class | mAP@50 |
-|---------|---------|
-| Ball | 80.9% |
-| Bat | 77.9% |
-| Player | 94.5% |
-| Stumps | 75.0% |
+| Class | Precision | Recall | mAP@50 |
+|---------|----------:|--------:|--------:|
+| Ball | 100.0% | 70.3% | 80.9% |
+| Bat | 76.6% | 75.9% | 77.9% |
+| Player | 92.3% | 93.0% | 94.5% |
+| Stumps | 67.3% | 71.7% | 75.0% |
+
+The model performs strongly on broadcast cricket footage, with excellent player detection and good overall performance for the remaining classes. Small objects such as the ball and stumps remain the most challenging due to motion blur, occlusion, and their limited size within the frame.
 
 ---
 
 # ⚠ Current Limitations
 
-The model performs well on broadcast cricket footage but still faces challenges in some scenarios:
+The current version performs well on standard broadcast footage but still has some limitations:
 
-- Small and fast-moving balls
-- Occluded stumps
+- Small and fast-moving cricket balls
+- Partial stump occlusion
 - Motion blur
-- Camera zoom transitions
-- Replay scenes
-- Player ID consistency during tracking
-
-These limitations can be addressed with a larger and more diverse training dataset.
+- Sudden camera zooms and transitions
+- Replay sequences
+- Stable object tracking has not yet been integrated
 
 ---
 
-# 🔮 Future Improvements
+# 🚀 Future Improvements
 
-- DeepSORT / ByteTrack integration
+The following features are planned for future development:
+
+- ByteTrack / DeepSORT integration
 - Stable player identity tracking
 - Ball trajectory estimation
-- Pitch mapping
-- Shot classification
-- Stroke analysis
+- Player movement analysis
+- Cricket pitch mapping
+- Shot direction visualization
 - Wagon wheel generation
-- Automatic highlights
+- Heatmaps
+- Automatic highlight generation
 - Scoreboard OCR
-- LBW assistance
-- Hawkeye-style visualization
+- Real-time cricket analytics dashboard
 
 ---
 
@@ -236,17 +257,22 @@ These limitations can be addressed with a larger and more diverse training datas
 
 **Hamza Bin Javed**
 
+GitHub: https://github.com/hamzaj17
+
 ---
 
-# ⭐ Acknowledgements
+# 🙏 Acknowledgements
+
+This project was built using several excellent open-source tools and libraries.
 
 - Ultralytics YOLOv8
-- Roboflow
 - PyTorch
 - OpenCV
+- Roboflow
+- Matplotlib
 
 ---
 
-## 📄 License
+# 📄 License
 
-This project is intended for educational and research purposes.
+This project is released for educational, research, and portfolio purposes.
